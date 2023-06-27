@@ -81,18 +81,18 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         'PAIAplus\ILS\Driver\PAIA' => 'PAIAplus\ILS\Driver\PAIAFactory',
         'VuFind\ILS\Driver\Aleph' => 'VuFind\ILS\Driver\AlephFactory',
         'VuFind\ILS\Driver\Alma' => 'VuFind\ILS\Driver\AlmaFactory',
-        'VuFind\ILS\Driver\Amicus' => 'Zend\ServiceManager\Factory\InvokableFactory',
+        'VuFind\ILS\Driver\Amicus' => 'Laminas\ServiceManager\Factory\InvokableFactory',
         'VuFind\ILS\Driver\DAIA' =>
             'VuFind\ILS\Driver\DriverWithDateConverterFactory',
         'VuFind\ILS\Driver\Demo' => 'VuFind\ILS\Driver\DemoFactory',
         'VuFind\ILS\Driver\Evergreen' =>
-            'Zend\ServiceManager\Factory\InvokableFactory',
+            'Laminas\ServiceManager\Factory\InvokableFactory',
         'VuFind\ILS\Driver\Horizon' =>
             'VuFind\ILS\Driver\DriverWithDateConverterFactory',
         'VuFind\ILS\Driver\HorizonXMLAPI' =>
             'VuFind\ILS\Driver\DriverWithDateConverterFactory',
         'VuFind\ILS\Driver\Innovative' =>
-            'Zend\ServiceManager\Factory\InvokableFactory',
+            'Laminas\ServiceManager\Factory\InvokableFactory',
         'VuFind\ILS\Driver\Koha' =>
             'VuFind\ILS\Driver\DriverWithDateConverterFactory',
         'VuFind\ILS\Driver\KohaILSDI' =>
@@ -101,23 +101,23 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
             'VuFind\ILS\Driver\DriverWithDateConverterFactory',
         'VuFind\ILS\Driver\MultiBackend' => 'VuFind\ILS\Driver\MultiBackendFactory',
         'VuFind\ILS\Driver\NewGenLib' =>
-            'Zend\ServiceManager\Factory\InvokableFactory',
+            'Laminas\ServiceManager\Factory\InvokableFactory',
         'VuFind\ILS\Driver\NoILS' => 'VuFind\ILS\Driver\NoILSFactory',
         'VuFind\ILS\Driver\Polaris' =>
-            'Zend\ServiceManager\Factory\InvokableFactory',
-        'VuFind\ILS\Driver\Sample' => 'Zend\ServiceManager\Factory\InvokableFactory',
-        'VuFind\ILS\Driver\Sierra' => 'Zend\ServiceManager\Factory\InvokableFactory',
+            'Laminas\ServiceManager\Factory\InvokableFactory',
+        'VuFind\ILS\Driver\Sample' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+        'VuFind\ILS\Driver\Sierra' => 'Laminas\ServiceManager\Factory\InvokableFactory',
         'VuFind\ILS\Driver\SierraRest' => 'VuFind\ILS\Driver\SierraRestFactory',
         'VuFind\ILS\Driver\Symphony' => 'VuFind\ILS\Driver\SymphonyFactory',
         'VuFind\ILS\Driver\Unicorn' =>
             'VuFind\ILS\Driver\DriverWithDateConverterFactory',
-        'VuFind\ILS\Driver\Virtua' => 'Zend\ServiceManager\Factory\InvokableFactory',
+        'VuFind\ILS\Driver\Virtua' => 'Laminas\ServiceManager\Factory\InvokableFactory',
         'VuFind\ILS\Driver\Voyager' =>
             'VuFind\ILS\Driver\DriverWithDateConverterFactory',
         'VuFind\ILS\Driver\VoyagerRestful' =>
             'VuFind\ILS\Driver\VoyagerRestfulFactory',
         'VuFind\ILS\Driver\XCNCIP2' =>
-            'Zend\ServiceManager\Factory\InvokableFactory',
+            'Laminas\ServiceManager\Factory\InvokableFactory',
     ];
 
     /**

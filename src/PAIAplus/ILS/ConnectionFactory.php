@@ -28,7 +28,7 @@
 namespace PAIAplus\ILS;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * ILS connection factory

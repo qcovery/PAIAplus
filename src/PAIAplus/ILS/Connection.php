@@ -35,7 +35,7 @@ namespace PAIAplus\ILS;
 use VuFind\Exception\ILS as ILSException;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFind\ILS\Driver\DriverInterface;
-use Zend\Log\LoggerAwareInterface;
+use Laminas\Log\LoggerAwareInterface;
 */
 use VuFind\ILS\Connection as IlsConnection;
 
@@ -57,12 +57,12 @@ class Connection extends IlsConnection
     /**
      * Constructor
      *
-     * @param \Zend\Config\Config              $config        Configuration
+     * @param \Laminas\Config\Config              $config        Configuration
      * representing the [Catalog] section of config.ini
      * @param \VuFind\ILS\Driver\PluginManager $driverManager Driver plugin manager
      * @param \VuFind\Config\PluginManager     $configReader  Configuration loader
      */
-    public function __construct(\Zend\Config\Config $config,
+    public function __construct(\Laminas\Config\Config $config,
         \PAIAplus\ILS\Driver\PluginManager $driverManager,
         \VuFind\Config\PluginManager $configReader
     ) {
