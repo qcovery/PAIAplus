@@ -63,7 +63,7 @@ class PAIAFactory extends DriverWithDateConverterFactory
         }
         return parent::__invoke(
             $container, $requestedName,
-            [$container->get('Zend\Session\SessionManager'),
+            [$container->get('Laminas\Session\SessionManager'),
              $container->get('VuFind\Config\PluginManager')->get('locations')]
         );
     }

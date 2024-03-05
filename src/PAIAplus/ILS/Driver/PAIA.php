@@ -62,10 +62,10 @@ class PAIA extends PAIAbase
      * PAIA constructor.
      *
      * @param \VuFind\Date\Converter       $converter      Date converter
-     * @param \Zend\Session\SessionManager $sessionManager Session Manager
+     * @param \Laminas\Session\SessionManager $sessionManager Session Manager
      */
     public function __construct(\VuFind\Date\Converter $converter,
-        \Zend\Session\SessionManager $sessionManager, $locationMap
+        \Laminas\Session\SessionManager $sessionManager, $locationMap
     ) {
         parent::__construct($converter, $sessionManager);
         $this->locationMap = $locationMap->toArray();

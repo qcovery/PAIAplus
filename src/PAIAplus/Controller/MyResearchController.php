@@ -78,8 +78,8 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
         // Build paginator if needed:
         if ($limit > 0 && $limit < count($result)) {
-            $adapter = new \Zend\Paginator\Adapter\ArrayAdapter($result);
-            $paginator = new \Zend\Paginator\Paginator($adapter);
+            $adapter = new \Laminas\Paginator\Adapter\ArrayAdapter($result);
+            $paginator = new \Laminas\Paginator\Paginator($adapter);
             $paginator->setItemCountPerPage($limit);
             $paginator->setCurrentPageNumber($this->params()->fromQuery('page', 1));
             $pageStart = $paginator->getAbsoluteItemNumber(1) - 1;
