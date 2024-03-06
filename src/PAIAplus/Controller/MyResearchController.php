@@ -77,8 +77,8 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             ? $config->Catalog->checked_out_page_size : 50;
 
         // Build paginator if needed:
-        if ($limit > 0 && $limit < count($result)) {
-            $adapter = new \Laminas\Paginator\Adapter\ArrayAdapter($result);
+        if ($limit > 0 && $limit < $result['count']) {
+            $adapter = new \Laminas\Paginator\Adapter\ArrayAdapter($result['records']);
             $paginator = new \Laminas\Paginator\Paginator($adapter);
             $paginator->setItemCountPerPage($limit);
             $paginator->setCurrentPageNumber($this->params()->fromQuery('page', 1));
@@ -87,11 +87,11 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         } else {
             $paginator = false;
             $pageStart = 0;
-            $pageEnd = count($result);
+            $pageEnd = $result['count'];
         }
 
         $transactions = $hiddenTransactions = [];
-        foreach ($result as $i => $current) {
+        foreach ($result['records'] as $i => $current) {
             // Add renewal details if appropriate:
             $current = $this->renewals()->addRenewDetails(
                 $catalog, $current, $renewStatus
