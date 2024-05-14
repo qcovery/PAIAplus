@@ -322,4 +322,22 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             $view->patronStatus = $patron['status'];
         }
     }
+
+    /**
+     * Get a record driver object corresponding to an array returned by an ILS
+     * driver's getMyHolds / getMyTransactions method.
+     *
+     * @param array $current Record information
+     *
+     * @return \VuFind\RecordDriver\AbstractBase
+     */
+    protected function getDriverForILSRecord($current)
+    {
+        $id = $current['id'] ?? '';
+        $source = $current['source'] ?? DEFAULT_SEARCH_BACKEND;
+        $record = $this->serviceLocator->get('VuFind\Record\Loader')
+            ->load($id, $source, true);
+        $record->setExtraDetail('ils_details', $current);
+        return $record;
+    }
 }
