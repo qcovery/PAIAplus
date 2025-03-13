@@ -6,12 +6,22 @@ $config = [
         'allow_override' => true,
         'factories' => [
             'PAIAplus\Auth\ILSAuthenticator' => 'PAIAplus\Auth\ILSAuthenticatorFactory',
-            'PAIAplus\ILS\Driver\PAIA' => 'PAIAplus\ILS\Driver\PAIAFactory',
         ],
         'aliases' => [
             'VuFind\Auth\ILSAuthenticator' => 'PAIAplus\Auth\ILSAuthenticator',
             'VuFind\ILSAuthenticator' => 'PAIAplus\Auth\ILSAuthenticator',
-            'paia' => 'PAIAplus\ILS\Driver\PAIA',
+        ],
+    ],
+    'vufind' => [
+        'plugin_managers' => [
+            'ils_driver' => [
+                'factories' => [
+                    'PAIAplus\ILS\Driver\PAIA' => 'PAIAplus\ILS\Driver\PAIAFactory',
+                ],
+                'aliases' => [
+                    'paia' => 'PAIAplus\ILS\Driver\PAIA',
+                ],
+            ],
         ],
     ],
     'controllers' => [

@@ -407,17 +407,9 @@ class PAIA extends PAIAbase
         $doc['item'] = stripslashes($item);
         $post_data['doc'][] = $doc;
 
-        try {
-            $array_response = $this->paiaPostAsArray(
-                'core/' . $patron['cat_username'] . '/request', $post_data
-            );
-        } catch (ILSException $e) {
-            $this->debug($e->getMessage());
-            return [
-                'success' => false,
-                'sysMessage' => $e->getMessage(),
-            ];
-        }
+        $array_response = $this->paiaPostAsArray(
+            'core/' . $patron['cat_username'] . '/request', $post_data
+        );
 
         if ($holdDetails['type'] == 'order') {
             if (isset($array_response['doc'][0]['condition']['http://purl.org/ontology/paia#StorageCondition']['option'])) {
@@ -466,7 +458,7 @@ class PAIA extends PAIAbase
         return $result;
     }
 
-    public function getCancelStorageRetrievalRequestDetails($details)
+    public function getCancelStorageRetrievalRequestDetails($details, $patron)
     {
         return $details['item_id'];
     }
