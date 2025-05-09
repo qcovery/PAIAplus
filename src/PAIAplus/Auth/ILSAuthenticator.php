@@ -29,6 +29,8 @@ namespace PAIAplus\Auth;
 
 use VuFind\Auth\Manager as AuthManager;
 use VuFind\ILS\Connection as ILSConnection;
+use VuFind\Auth\EmailAuthenticator;
+use VuFind\Config\Config;
 
 /**
  * Class for managing ILS-specific authentication.
@@ -53,7 +55,7 @@ class ILSAuthenticator extends \VuFind\Auth\ILSAuthenticator
      *
      * @var ILSConnection
      */
-    protected $catalog;
+    //protected $catalog;
 
     /**
      * Cache for ILS account information (keyed by username)
@@ -62,16 +64,22 @@ class ILSAuthenticator extends \VuFind\Auth\ILSAuthenticator
      */
     protected $ilsAccount = [];
 
+
     /**
      * Constructor
      *
-     * @param Manager       $auth    Auth manager
-     * @param ILSConnection $catalog ILS connection
+     * @param callable            $authCB             Auth manager callback
+     * @param ILSConnection       $catalog            ILS connection
+     * @param ?EmailAuthenticator $emailAuthenticator Email authenticator
+     * @param ?Config             $config             Configuration from config.ini
      */
-    public function __construct(AuthManager $auth, ILSConnection $catalog)
-    {
-        $this->auth = $auth;
-        $this->catalog = $catalog;
+    public function __construct(
+        callable $authCB,
+        protected ILSConnection $catalog,
+        protected ?EmailAuthenticator $emailAuthenticator = null,
+        protected ?Config $config = null
+    ) {
+        $this->authManagerCallback = $authCB;
     }
 
     /**
