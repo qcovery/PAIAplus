@@ -27,8 +27,8 @@
  */
 namespace PAIAplus\Controller;
 
-use Laminas\Config\Config;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use VuFind\Config\Config;
 
 /**
  * Record Controller

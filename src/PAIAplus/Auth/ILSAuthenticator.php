@@ -27,7 +27,7 @@
  */
 namespace PAIAplus\Auth;
 
-use VuFind\Auth\Manager as AuthManager;
+use Closure;
 use VuFind\ILS\Connection as ILSConnection;
 use VuFind\Auth\EmailAuthenticator;
 use VuFind\Config\Config;
@@ -74,12 +74,12 @@ class ILSAuthenticator extends \VuFind\Auth\ILSAuthenticator
      * @param ?Config             $config             Configuration from config.ini
      */
     public function __construct(
-        callable $authCB,
+        protected Closure $authManagerCallback,
+        protected Closure $cipherFactory,
         protected ILSConnection $catalog,
         protected ?EmailAuthenticator $emailAuthenticator = null,
         protected ?Config $config = null
     ) {
-        $this->authManagerCallback = $authCB;
     }
 
     /**
