@@ -36,6 +36,20 @@ $config = [
             'myresearch' => 'PAIAplus\Controller\MyResearchController',
         ],
     ],
+    'router' => [
+        'routes' => [
+            'myresearch-reset' => [
+                'type' => 'Laminas\Router\Http\Literal',
+                'options' => [
+                    'route' => '/myresearch/reset',
+                    'defaults' => [
+                        'controller' => 'PAIAplus\Controller\MyResearchController',
+                        'action' => 'reset',
+                    ],
+                ],
+            ],
+        ]
+    ]
 ];
 
 return $config;

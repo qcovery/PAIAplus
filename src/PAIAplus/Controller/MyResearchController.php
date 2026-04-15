@@ -279,6 +279,35 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         return $view;
     }
 
+    /**
+     * Send a request to PAIA to reset the user's password.
+     *
+     * @return \Laminas\View\Model\ViewModel
+     */
+    public function resetAction()
+    {
+        // Display form
+        $view = $this->createViewModel();
+        $view->useCaptcha = $this->captcha()->active('resetPassword');
+        $view->setTemplate('myresearch/reset-password');
+
+        // Handle submitted form. Send the request for password reset.
+        if ($this->formWasSubmitted('submit')) {
+            $username= $this->params()->fromPost('username');
+            $catalog = $this->getILS();
+            $result = $catalog->resetPassword($username);
+
+            $translator = $this->serviceLocator->get('Laminas\Mvc\I18n\Translator');
+            if ($result == 'If the provided user number is correct, an email was sent with instructions on how to reset the password.') {
+                $this->flashMessenger()->addSuccessMessage($translator->translate('Reset Password Success'));
+            } else {
+                $this->flashMessenger()->addErrorMessage($translator->translate('Reset Password Error'));
+            }
+        }
+
+        return $view;
+    }
+
     public function profileAction()
     {
         $view = parent::profileAction();
