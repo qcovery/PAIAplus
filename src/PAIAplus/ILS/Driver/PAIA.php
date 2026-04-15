@@ -59,6 +59,14 @@ class PAIA extends PAIAbase
     protected $locationMap;
 
     /**
+     * Additional PAIA scopes as defined in
+     * http://gbv.github.io/paia/paia.html#access-tokens-and-scopes
+     *
+     * This extends the scopes defined in the PAIA base class.
+     */
+    private const SCOPE_RESET_PASSWORD = 'reset_password';
+
+    /**
      * PAIA constructor.
      *
      * @param \VuFind\Date\Converter       $converter      Date converter
@@ -465,5 +473,88 @@ class PAIA extends PAIAbase
 
     public function cancelStorageRetrievalRequests($cancelDetails) {
         return $this->cancelHolds($cancelDetails);
+    }
+
+    /**
+     * Send a request to PAIA to reset the password.
+     *
+     * @param string $username Username of the patron to reset password for
+     *
+     * @throws \Exception
+     */
+    public function resetPassword(string $username): string
+    {
+        if (empty($username)) {
+            throw new \Exception('Username cannot be empty');
+        }
+        if (preg_match('/[^a-zA-Z0-9_@.-]/', $username)) {
+            throw new \Exception('Username contains invalid characters');
+        }
+        if ($this->grantType != 'password') {
+            throw new \Exception('Password reset only supports password grant type at the moment.');
+        }
+
+        // Get access token and patron
+        $paiaAccessInfos = $this->prepareRequestForResetPassword($username);
+        if (empty($paiaAccessInfos['access_token']) || empty($paiaAccessInfos['patron'])) {
+            throw new \Exception('Failed to retrieve access token or patron id for password reset');
+        }
+
+        // Send request for password reset
+        $responseJson = $this->paiaPostRequest('auth/reset', ['patron' => $paiaAccessInfos['patron']], $paiaAccessInfos['access_token']);
+        $responseArray = $this->paiaParseJsonAsArray($responseJson);
+
+        return $responseArray['message'] ?? '';
+    }
+
+    /**
+     * Prepare the request for resetting password.
+     * This method will send a request to PAIA to retrieve the access token and patron id necessary for the
+     * actual password reset request.
+     *
+     * @param string $username Username of the patron to reset password for
+     *
+     * @throws \Exception
+     */
+    private function prepareRequestForResetPassword($username): array
+    {
+        $responseArray = [];
+
+        // Prepare request
+        $post_data = [
+            'username' => $username,
+            'password' => '',
+            'grant_type' => $this->grantType,
+            'scope' => self::SCOPE_RESET_PASSWORD,
+        ];
+
+        // Send request
+        $result = $this->httpService->post(
+            $this->paiaURL . 'auth/login',
+            json_encode($post_data),
+            'application/json; charset=UTF-8',
+            $this->paiaTimeout
+        );
+
+        // Check response
+        if (!$result->isSuccess()) {
+            // log error for debugging
+            $this->debug(
+                'HTTP status ' . $result->getStatusCode() .
+                ' received'
+            );
+            return $responseArray;
+        }
+
+        // Parse response and extract access token and patron id
+        $paiaResponseArray = $this->paiaParseJsonAsArray($result->getBody());
+        if (isset($paiaResponseArray['access_token'])) {
+            $responseArray['access_token'] = $paiaResponseArray['access_token'];
+        }
+        if (isset($paiaResponseArray['patron'])) {
+            $responseArray['patron'] = $paiaResponseArray['patron'];
+        }
+
+        return $responseArray;
     }
 }
