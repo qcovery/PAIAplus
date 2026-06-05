@@ -146,7 +146,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
     {
         // If this authentication method doesn't use a VuFind-generated login
         // form, force it through:
-        if ($this->getSessionInitiator()) {
+        if ($this->getAuthManager()->getSessionInitiator()) {
             // Don't get stuck in an infinite loop -- if processLogin is already
             // set, it probably means Home action is forwarding back here to
             // report an error!
