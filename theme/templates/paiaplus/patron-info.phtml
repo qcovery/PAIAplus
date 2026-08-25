@@ -1,0 +1,34 @@
+<?php
+/**
+ * Displays selected information from the account of the currently logged-in
+ * patron (expiration date, patron status).
+ *
+ * This partial is currently meant to be rendered as a notification-like box above or beyond the breadcrumbs.
+ * However, the data is provided by the PatronInfo view helper, so this template can be
+ * included anywhere with the following line:
+ *
+ *   <?=$this->render('paiaplus/patron-info.phtml')?>
+ *
+ * The information is currently only rendered inside the account area, where the user is usually logged in.
+ */
+?>
+<?php $patronInfoTemplateDirs = ['myresearch', 'holds']; ?>
+<?php if (in_array($this->layout()->templateDir ?? null, $patronInfoTemplateDirs, true)): ?>
+  <?php
+    $patronInfo = $this->PatronInfo();
+    $expires = $patronInfo->getExpirationDateFormatted();
+    $status = $patronInfo->showStatus() ? $patronInfo->getStatus() : '';
+  ?>
+<div class="patron-info hidden-print">
+  <?php if (!empty($patronInfo->getExpirationClass())): ?>
+    <div class="alert patron-expires <?=$this->escapeHtmlAttr($patronInfo->getExpirationClass())?>">
+      <?=$this->transEsc('patron_account_expires')?>: <?=$this->escapeHtml($expires)?>
+    </div>
+  <?php endif; ?>
+  <?php if (!empty($status)): ?>
+    <div class="patron-status alert alert-danger">
+      <?=$this->transEsc('hold_error_blocked_status_' . $status)?>
+    </div>
+  <?php endif; ?>
+</div>
+<?php endif; ?>
