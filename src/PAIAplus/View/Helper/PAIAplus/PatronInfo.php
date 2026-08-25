@@ -127,7 +127,7 @@ class PatronInfo extends \Laminas\View\Helper\AbstractHelper
      *
      * @return \DateTimeImmutable|null Null if the date is missing or unparseable
      */
-    protected function getExpirationDate()
+    public function getExpirationDate()
     {
         $expires = $this->getPatronInfo()['expiresRaw'];
         if (empty($expires)) {
