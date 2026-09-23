@@ -16,8 +16,9 @@ use VuFind\Auth\ILSAuthenticator;
 use VuFind\ILS\Connection;
 
 /**
- * Makes the expiration date and the patron status of the currently logged-in patron available
- * in every template (e.g., header.phtml), without the need to pass them through every MyResearch action.
+ * Makes the expiration date, the patron status and the account note of the currently logged-in
+ * patron available in every template (e.g., header.phtml), without the need to pass them through
+ * every MyResearch action.
  */
 class PatronInfo extends \Laminas\View\Helper\AbstractHelper
 {
@@ -87,6 +88,7 @@ class PatronInfo extends \Laminas\View\Helper\AbstractHelper
                 'expires' => '',
                 'expiresRaw' => '',
                 'status' => '',
+                'note' => '',
             ];
             try {
                 $patron = $this->ilsAuthenticator->storedCatalogLogin();
@@ -99,6 +101,8 @@ class PatronInfo extends \Laminas\View\Helper\AbstractHelper
                         // which can be compared to the current date.
                         'expiresRaw' => $patron['expires'] ?? '',
                         'status' => $patron['status'] ?? '',
+                        // The ILS driver only sets the note if it is not empty.
+                        'note' => $profile['note'] ?? '',
                     ];
                 }
             } catch (\Exception $e) {
@@ -183,5 +187,40 @@ class PatronInfo extends \Laminas\View\Helper\AbstractHelper
     public function showStatus()
     {
         return !empty($this->config['PAIA']['show_patron_status_on_all_pages']);
+    }
+
+    /**
+     * Should the expiration date be displayed on all account pages? Unlike the
+     * note and the status this defaults to true, because the display is already
+     * limited to accounts that are about to expire or have expired.
+     *
+     * @return bool
+     */
+    public function showExpirationDate()
+    {
+        return (bool)($this->config['PAIA']['show_expiration_date_on_all_pages'] ?? true);
+    }
+
+    /**
+     * Get the note stored in the patron account.
+     *
+     * The note is maintained by the library and may contain markup, so it is
+     * returned unescaped -- see paiaplus/patron-info.phtml.
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->getPatronInfo()['note'];
+    }
+
+    /**
+     * Should the account note be displayed on all account pages?
+     *
+     * @return bool
+     */
+    public function showNote()
+    {
+        return !empty($this->config['PAIA']['show_note_on_all_pages']);
     }
 }

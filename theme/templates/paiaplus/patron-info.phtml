@@ -1,7 +1,7 @@
 <?php
 /**
  * Displays selected information from the account of the currently logged-in
- * patron (expiration date, patron status).
+ * patron (expiration date, patron status, account note).
  *
  * This partial is currently meant to be rendered as a notification-like box above or beyond the breadcrumbs.
  * However, the data is provided by the PatronInfo view helper, so this template can be
@@ -16,13 +16,23 @@
 <?php if (in_array($this->layout()->templateDir ?? null, $patronInfoTemplateDirs, true)): ?>
   <?php
     $patronInfo = $this->PatronInfo();
-    $expires = $patronInfo->getExpirationDateFormatted();
+    $expirationClass = $patronInfo->showExpirationDate()
+        ? $patronInfo->getExpirationClass() : '';
     $status = $patronInfo->showStatus() ? $patronInfo->getStatus() : '';
+    $note = $patronInfo->showNote() ? $patronInfo->getNote() : '';
   ?>
+  <?php /* Only render the box if there is something to show -- a theme may give it a border. */ ?>
+  <?php if (!empty($expirationClass) || !empty($note) || !empty($status)): ?>
 <div class="patron-info hidden-print">
-  <?php if (!empty($patronInfo->getExpirationClass())): ?>
-    <div class="alert patron-expires <?=$this->escapeHtmlAttr($patronInfo->getExpirationClass())?>">
-      <?=$this->transEsc('patron_account_expires')?>: <?=$this->escapeHtml($expires)?>
+  <?php if (!empty($expirationClass)): ?>
+    <div class="alert patron-expires <?=$this->escapeHtmlAttr($expirationClass)?>">
+      <?=$this->transEsc('patron_account_expires')?>: <?=$this->escapeHtml($patronInfo->getExpirationDateFormatted())?>
+    </div>
+  <?php endif; ?>
+  <?php /* The note is maintained by the library and may contain markup, so it is not escaped. */ ?>
+  <?php if (!empty($note)): ?>
+    <div class="patron-note alert alert-info">
+      <?=$note?>
     </div>
   <?php endif; ?>
   <?php if (!empty($status)): ?>
@@ -31,4 +41,5 @@
     </div>
   <?php endif; ?>
 </div>
+  <?php endif; ?>
 <?php endif; ?>
