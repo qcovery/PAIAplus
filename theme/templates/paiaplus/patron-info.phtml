@@ -20,9 +20,13 @@
     $status = $patronInfo->showStatus() ? $patronInfo->getStatus() : '';
   ?>
 <div class="patron-info hidden-print">
-  <?php if (!empty($patronInfo->getExpirationClass())): ?>
+  <?php if ($patronInfo->getExpirationState() > 0): ?>
     <div class="alert patron-expires <?=$this->escapeHtmlAttr($patronInfo->getExpirationClass())?>">
-      <?=$this->transEsc('patron_account_expires')?>: <?=$this->escapeHtml($expires)?>
+      <?php if($patronInfo->getExpirationState() == 1): ?>
+        <?=$this->transEsc('patron_account_expired_hint', ['%%date%%' => $expires])?>
+      <?php else: ?>
+        <?=$this->transEsc('patron_account_expires_hint', ['%%date%%' => $expires])?>
+      <?php endif; ?>
     </div>
   <?php endif; ?>
   <?php if (!empty($status)): ?>

@@ -148,21 +148,37 @@ class PatronInfo extends \Laminas\View\Helper\AbstractHelper
      *
      * @return string Class name or an empty string
      */
-    public function getExpirationClass()
+    public function getExpirationClass(): string
+    {
+        return match ($this->getExpirationState()) {
+            1 => 'alert-danger',
+            2 => 'alert-warning',
+            default => '',
+        };
+    }
+
+    /**
+     * Get the state of the patron account expiration.
+     *
+     * @return int 0 if the account has no expiration date,
+     *             1 if the account has already expired,
+     *             2 if it expires within the number of days configured in expiration_warning_days (set in PAIA.ini)
+     */
+    public function getExpirationState(): int
     {
         $expiryDate = $this->getExpirationDate();
         if ($expiryDate === null) {
-            return '';
+            return 0;
         }
         $today = new \DateTimeImmutable('today');
         if ($expiryDate < $today) {
-            return 'alert-danger';
+            return 1;
         }
         $days = (int)($this->config['PAIA']['expiration_warning_days'] ?? 30);
         if ($days > 0 && $expiryDate < $today->modify('+' . $days . ' days')) {
-            return 'alert-warning';
+            return 2;
         }
-        return '';
+        return 0;
     }
 
     /**
